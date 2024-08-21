@@ -23,7 +23,6 @@ pub struct PR {
 
 impl PR {
     pub async fn to_change(&self, owner: String, repo: String) -> Result<Change> {
-        println!("owner: {owner:?}, repo: {repo:?}, pr: {:?}", self.pr);
         let pr = octocrab::instance().pulls(owner, repo).get(self.pr).await?;
         // TODO if state == "closed", we should be able dismiss it
         let title = pr
