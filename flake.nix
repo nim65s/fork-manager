@@ -9,7 +9,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     poetry2nix.url = "github:nix-community/poetry2nix";
     treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
+      url = "github:nim65s/treefmt-nix"; # https://github.com/numtide/treefmt-nix/pull/224
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -62,6 +62,7 @@
                 check = true;
                 format = true;
               };
+              toml-sort.enable = true;
             };
           };
         };
