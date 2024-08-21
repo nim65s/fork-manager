@@ -1,22 +1,5 @@
-#[derive(thiserror::Error, Debug)]
-pub enum Error {
-    #[error("IO Error: {0}")]
-    IO(#[from] std::io::Error),
-
-    #[error("serde yml error: {0}")]
-    SerdeYml(#[from] serde_yml::Error),
-
-    #[error("regex error: {0}")]
-    Regex(#[from] regex::Error),
-
-    #[error("octocrab error: {0}")]
-    Octocrab(#[from] octocrab::Error),
-
-    #[error("Can't parse owner/repo from this github url: {0}")]
-    GithubParseError(String),
-}
-
-pub type Result<T> = core::result::Result<T, Error>;
+mod error;
+pub use error::*;
 
 #[derive(serde::Serialize, serde::Deserialize, PartialEq, Eq, Debug)]
 pub struct Upstream {
@@ -30,6 +13,7 @@ pub struct Change {
     pub repo: String,
     pub branch: String,
 }
+
 #[derive(serde::Serialize, serde::Deserialize, PartialEq, Eq, Debug)]
 pub struct PR {
     pub pr: u64,
