@@ -1,0 +1,1 @@
+"""fork-manager main module."""
