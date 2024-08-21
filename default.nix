@@ -10,10 +10,16 @@ rustPlatform.buildRustPackage {
       ./Cargo.lock
       ./Cargo.toml
       ./src
+      ./tests
     ];
   };
 
   cargoLock.lockFile = ./Cargo.lock;
+
+  checkFlags = [
+    # This require network access
+    "--skip=pr_to_change"
+  ];
 
   meta = {
     description = "Automatize your fork";
