@@ -40,8 +40,13 @@
             program = "${nixpkgs.lib.getExe self'.packages.default}";
           };
           devShells.default = pkgs.mkShell {
+            POETRY_VIRTUALENVS_IN_PROJECT = "true";
             nativeBuildInputs = [ config.treefmt.build.wrapper ];
             inputsFrom = [ self'.packages.default ];
+            shellHook = ''
+              poetry install
+              source .venv/bin/activate
+            '';
           };
           packages.default = mkPoetryApplication {
             projectDir = ./.;
