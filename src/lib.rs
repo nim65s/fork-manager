@@ -1,5 +1,7 @@
 mod error;
-pub use error::*;
+pub use error::{Error, Result};
+use std::fs::File;
+use std::path::PathBuf;
 
 #[derive(serde::Serialize, serde::Deserialize, PartialEq, Eq, Debug)]
 pub struct Upstream {
@@ -75,5 +77,42 @@ impl Config {
             }
         }
         Ok(())
+    }
+
+    pub fn get_upstream_branch(&mut self) {
+        if self.upstream.branch.is_none() {
+            self.upstream.branch = Some(self.branch.clone());
+        }
+    }
+
+    pub async fn new() -> Result<Self> {
+        let config = File::open(find_config_file()?)?;
+        let mut config: Self = serde_yml::from_reader(config)?;
+        config.get_prs().await?;
+        config.get_upstream_branch();
+        Ok(config)
+    }
+}
+
+pub fn find_config_file() -> Result<PathBuf> {
+    let filename =
+        &std::env::var("FORK_MANAGER_FILENAME").unwrap_or("fork-manager.yaml".to_string());
+
+    let args: Vec<String> = std::env::args().collect();
+    let project = if args.len() == 2 {
+        &args[1]
+    } else {
+        &std::env::var("FORK_MANAGER_PROJECT").unwrap_or(".".to_string())
+    };
+
+    let mut dir = PathBuf::from(project).canonicalize()?;
+    loop {
+        if dir.join(filename).is_file() {
+            return Ok(dir.join(filename));
+        }
+        dir = dir
+            .parent()
+            .ok_or(Error::NotFound(project.to_string()))?
+            .to_path_buf();
     }
 }

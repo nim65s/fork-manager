@@ -14,6 +14,9 @@ pub enum Error {
 
     #[error("Can't parse owner/repo from this github url: {0}")]
     GithubParseError(String),
+
+    #[error("Can't find fork-manager.yaml in {0}")]
+    NotFound(String),
 }
 
 pub type Result<T> = core::result::Result<T, Error>;
