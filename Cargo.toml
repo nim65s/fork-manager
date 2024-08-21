@@ -1,6 +1,30 @@
 [dependencies]
+anyhow = "1.0.86"
+serde = {features = ["derive"], version = "1.0.208"}
+serde_with = "3.9.0"
+serde_yml = "0.0.11"
+thiserror = "1.0.63"
+
+[dev-dependencies]
+indoc = "2.0.5"
 
 [package]
+authors = ["Guilhem Saurel <guilhem.saurel@laas.fr>"]
+description = "Automatize your fork"
 edition = "2021"
+keywords = ["ci", "pre-commit", "serde", "serialization", "yaml"]
+license = "MIT OR Apache-2.0"
 name = "fork-manager"
+repository = "https://github.com/nim65s/fork-manager"
 version = "0.1.0"
+
+[package.metadata.release]
+pre-release-replacements = [
+  {exactly = 1, file = "CHANGELOG.md", replace = "...{{tag_name}}", search = "\\.\\.\\.HEAD"},
+  {exactly = 1, file = "CHANGELOG.md", replace = "<!-- next-header -->\n## [Unreleased] - ReleaseDate\n", search = "<!-- next-header -->"},
+  {exactly = 1, file = "CHANGELOG.md", replace = "<!-- next-url -->\n[Unreleased]: https://github.com/nim65s/fork-manager/compare/{{tag_name}}...HEAD", search = "<!-- next-url -->"},
+  {file = "CHANGELOG.md", min = 1, replace = "{{date}}", search = "ReleaseDate"},
+  {file = "CHANGELOG.md", min = 1, replace = "{{version}}", search = "Unreleased"},
+  {file = "README.md", replace = "rev: v{{version}}", search = "rev: v.*"},
+  {file = "default.nix", replace = "version = \"{{version}}\";", search = "version = \".*\";"}
+]
