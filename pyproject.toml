@@ -6,9 +6,12 @@ authors = ["Guilhem Saurel <guilhem.saurel@laas.fr>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9,<4"
 ruamel-yaml = "^0.18.6"
 
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.8.0"
+ruff = "^0.6.1"
 
 [build-system]
 requires = ["poetry-core"]
