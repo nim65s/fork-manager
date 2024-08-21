@@ -1,7 +1,11 @@
 [dependencies]
 anyhow = "1.0.86"
+octocrab = "0.39.0"
+regex = "1.10.6"
 serde = {features = ["derive"], version = "1.0.208"}
 serde_yml = "0.0.11"
+thiserror = "1.0.63"
+tokio = { version = "1.39.3", features = ["full"] }
 
 [dev-dependencies]
 indoc = "2.0.5"
