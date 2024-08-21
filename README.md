@@ -1,5 +1,9 @@
 # Fork Manager
 
+[![CI](https://github.com/nim65s/fork-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/nim65s/fork-manager/actions/workflows/ci.yml)
+[![Release](https://github.com/nim65s/fork-manager/actions/workflows/release.yml/badge.svg)](https://github.com/nim65s/fork-manager/actions/workflows/release.yml)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/nim65s/fork-manager/main.svg)](https://results.pre-commit.ci/latest/github/nim65s/fork-manager/main)
+
 Automatize your fork
 
 ## Configuration
