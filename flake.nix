@@ -30,6 +30,7 @@
             nativeBuildInputs = [ config.treefmt.build.wrapper ];
             inputsFrom = [ self'.packages.default ];
             packages = [
+              pkgs.cargo-machete
               pkgs.clippy
               pkgs.rustfmt
             ];

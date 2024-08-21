@@ -1,9 +1,7 @@
 [dependencies]
 anyhow = "1.0.86"
 serde = {features = ["derive"], version = "1.0.208"}
-serde_with = "3.9.0"
 serde_yml = "0.0.11"
-thiserror = "1.0.63"
 
 [dev-dependencies]
 indoc = "2.0.5"
