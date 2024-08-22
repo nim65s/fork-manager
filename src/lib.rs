@@ -1,4 +1,6 @@
+mod cli;
 mod error;
+pub use cli::Args;
 pub use error::{Error, Result};
 use std::fs::File;
 use std::path::PathBuf;
@@ -94,8 +96,8 @@ pub struct Config {
 }
 
 impl Config {
-    pub async fn new() -> Result<Self> {
-        let config = File::open(find_config_file()?)?;
+    pub async fn new(args: Args) -> Result<Self> {
+        let config = File::open(find_config_file(args)?)?;
         let mut config: Self = serde_yml::from_reader(config)?;
         config.update().await?;
         Ok(config)
@@ -110,25 +112,17 @@ impl Config {
     }
 }
 
-pub fn find_config_file() -> Result<PathBuf> {
-    let filename =
-        &std::env::var("FORK_MANAGER_FILENAME").unwrap_or("fork-manager.yaml".to_string());
-
-    let args: Vec<String> = std::env::args().collect();
-    let project = if args.len() == 2 {
-        &args[1]
-    } else {
-        &std::env::var("FORK_MANAGER_PROJECT").unwrap_or(".".to_string())
-    };
-
-    let mut dir = PathBuf::from(project).canonicalize()?;
+pub fn find_config_file(args: Args) -> Result<PathBuf> {
+    let mut dir = args.project.canonicalize()?;
+    let mut path;
     loop {
-        if dir.join(filename).is_file() {
-            return Ok(dir.join(filename));
+        path = dir.join(args.filename.clone());
+        if path.is_file() {
+            return Ok(path);
         }
         dir = dir
             .parent()
-            .ok_or(Error::NotFound(project.to_string()))?
+            .ok_or(Error::NotFound(args.project.clone()))?
             .to_path_buf();
     }
 }

@@ -16,7 +16,7 @@ pub enum Error {
     GithubParseError(String),
 
     #[error("Can't find fork-manager.yaml in {0}")]
-    NotFound(String),
+    NotFound(std::path::PathBuf),
 }
 
 pub type Result<T> = core::result::Result<T, Error>;
