@@ -1,10 +1,10 @@
+use std::fs::File;
+
 mod cli;
 mod error;
+
 pub use cli::{print_completions, Args};
 pub use error::{Error, Result};
-use std::fs::File;
-use std::path::Path;
-use std::path::PathBuf;
 
 use serde::{Deserialize, Serialize};
 
@@ -98,8 +98,7 @@ pub struct Config {
 
 impl Config {
     pub async fn new(args: &Args) -> Result<Self> {
-        let config = find_config_file(&args.project, &args.filename)?;
-        let config = File::open(config)?;
+        let config = File::open(&args.config)?;
         let mut config: Self = serde_yml::from_reader(config)?;
         config.update().await?;
         Ok(config)
@@ -111,20 +110,5 @@ impl Config {
             fork.get_upstream_branch();
         }
         Ok(())
-    }
-}
-
-pub fn find_config_file(project: &Path, filename: &Path) -> Result<PathBuf> {
-    let mut dir = project.canonicalize()?;
-    let mut path;
-    loop {
-        path = dir.join(filename);
-        if path.is_file() {
-            return Ok(path);
-        }
-        dir = dir
-            .parent()
-            .ok_or(Error::NotFound(project.to_path_buf()))?
-            .to_path_buf();
     }
 }

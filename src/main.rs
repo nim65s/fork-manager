@@ -1,13 +1,8 @@
-use clap::{CommandFactory, Parser};
-use fork_manager::{print_completions, Args, Config};
+use fork_manager::{Args, Config};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let args = Args::parse();
-    if let Some(generator) = args.generator {
-        let mut cmd = Args::command();
-        print_completions(generator, &mut cmd);
-    } else {
+    if let Some(args) = Args::get()? {
         let config = Config::new(&args).await?;
         dbg!(config);
     }
