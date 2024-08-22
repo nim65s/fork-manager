@@ -40,8 +40,27 @@ forks:
 ```
 
 This configure the gepetto/forks github project, which manage the `gepetto-nixpkgs-master` and `gepetto-nixpkgs-devel`
-forks.
-The first takes github:NixOS/nixpkgs/master, merge one branch and one PR, and force push that to github:gepetto/nixpkgs/master.
-Thes second take this fresh github:gepetto/nixpkgs/master, merge an additinal branch, and force push that to github:gepetto/nixpkgs/devel.
+forks:
+- The first takes github:NixOS/nixpkgs/master, merge one branch and one PR, and force push that to github:gepetto/nixpkgs/master.
+- Thes second take this fresh github:gepetto/nixpkgs/master, merge an additinal branch, and force push that to github:gepetto/nixpkgs/devel.
 
 The work is done in a submodule per fork, and the actual push is gated with a `--push` flag.
+
+## CLI
+
+```
+$ fork-manager -h
+Automatize your fork
+
+Usage: fork-manager [OPTIONS]
+
+Options:
+  -c, --config-file <CONFIG_FILE>  Path to the configuration file. If not given, or not a file, this will be searched according to arguments "project" and "filename" [env: FORK_MANAGER_CONFIG_FILE=] [default: ./fork-manager.yaml]
+  -f, --filename <FILENAME>        Name of the configuration file to look for [env: FORK_MANAGER_CONFIG_FILENAME=] [default: fork-manager.yaml]
+  -p, --project <PROJECT>          Path to the project where to look for [env: FORK_MANAGER_PROJECT=] [default: .]
+      --generate <GENERATOR>       If provided, outputs the completion file for given shell and exit [possible values: bash, elvish, fish, powershell, zsh]
+  -d, --dry-run                    Only check config, don't run git commands
+      --push                       Really force push: deactivate dry run
+  -h, --help                       Print help
+  -V, --version                    Print version
+```
