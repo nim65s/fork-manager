@@ -1,13 +1,13 @@
 {
+  darwin,
   installShellFiles,
   lib,
   libgit2,
+  mainProgram ? "fork-manager",
   openssl,
   pkg-config,
   rustPlatform,
-  darwin,
   stdenv,
-  mainProgram ? "fork-manager",
 }:
 
 rustPlatform.buildRustPackage {
