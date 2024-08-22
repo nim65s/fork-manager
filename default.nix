@@ -1,4 +1,4 @@
-{ lib, rustPlatform, darwin }:
+{ lib, rustPlatform, darwin, stdenv }:
 
 rustPlatform.buildRustPackage {
   pname = "fork-manager";
