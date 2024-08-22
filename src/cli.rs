@@ -45,7 +45,7 @@ pub struct Args {
     #[arg(short, long)]
     pub dry_run: bool,
 
-    /// Really force push: deactivate dry run.
+    /// Do actually force push
     #[arg(long)]
     pub push: bool,
 }
