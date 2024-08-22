@@ -98,8 +98,8 @@ pub struct Config {
 
 impl Config {
     pub async fn new(args: &Args) -> Result<Self> {
-        let config = File::open(&args.config)?;
-        let mut config: Self = serde_yml::from_reader(config)?;
+        let config_file = File::open(&args.config_file)?;
+        let mut config: Self = serde_yml::from_reader(config_file)?;
         config.update().await?;
         Ok(config)
     }

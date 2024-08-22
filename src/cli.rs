@@ -5,17 +5,29 @@ use std::path::{Path, PathBuf};
 #[derive(clap::Parser, Debug)]
 #[command(version, about, long_about = None)]
 pub struct Args {
-    /// Name of the configuration file to parse
+    /// Path to the configuration file.
+    /// If not given, or not a file, this will be searched
+    /// according to arguments "project" and "filename"
     #[arg(
         short,
         long,
-        env = "FORK_MANAGER_FILENAME",
+        env = "FORK_MANAGER_CONFIG_FILE",
+        default_value = "./fork-manager.yaml",
+        value_hint = clap::ValueHint::FilePath,
+    )]
+    pub config_file: PathBuf,
+
+    /// Name of the configuration file to look for
+    #[arg(
+        short,
+        long,
+        env = "FORK_MANAGER_CONFIG_FILENAME",
         default_value = "fork-manager.yaml",
         value_hint = clap::ValueHint::FilePath,
     )]
     pub filename: PathBuf,
 
-    /// Path to the project to process
+    /// Path to the project where to look for
     #[arg(
         short,
         long,
@@ -25,11 +37,13 @@ pub struct Args {
     )]
     pub project: PathBuf,
 
-    // If provided, outputs the completion file for given shell
+    /// If provided, outputs the completion file for given shell and exit
     #[arg(long = "generate", value_enum)]
     pub generator: Option<clap_complete::Shell>,
 
-    pub config: PathBuf,
+    /// Really force push: deactivate dry run.
+    #[arg(long)]
+    pub push: bool,
 }
 
 impl Args {
@@ -40,7 +54,9 @@ impl Args {
             print_completions(generator, &mut cmd);
             Ok(None)
         } else {
-            args.config = find_config_file(&args.project, &args.filename)?;
+            if !args.config_file.is_file() {
+                args.config_file = find_config_file(&args.project, &args.filename)?;
+            }
             Ok(Some(args))
         }
     }
