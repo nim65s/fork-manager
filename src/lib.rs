@@ -3,20 +3,23 @@ pub use error::{Error, Result};
 use std::fs::File;
 use std::path::PathBuf;
 
-#[derive(serde::Serialize, serde::Deserialize, PartialEq, Eq, Debug)]
-pub struct Upstream {
-    pub repo: String,
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
+pub struct Repo {
+    pub url: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub branch: Option<String>,
 }
 
-#[derive(serde::Serialize, serde::Deserialize, PartialEq, Eq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
 pub struct Change {
     pub title: String,
-    pub repo: String,
+    pub url: String,
     pub branch: String,
 }
 
-#[derive(serde::Serialize, serde::Deserialize, PartialEq, Eq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
 pub struct PR {
     pub pr: u64,
 }
@@ -28,7 +31,7 @@ impl PR {
         let title = pr
             .title
             .ok_or(Error::GithubParseError("Missing PR title".to_string()))?;
-        let repo = pr
+        let url = pr
             .head
             .repo
             .ok_or(Error::GithubParseError("Missing repo head".to_string()))?
@@ -36,35 +39,31 @@ impl PR {
             .ok_or(Error::GithubParseError("Missing repo html url".to_string()))?
             .to_string();
         let branch = pr.head.ref_field;
-        Ok(Change {
-            title,
-            repo,
-            branch,
-        })
+        Ok(Change { title, url, branch })
     }
 }
 
-#[derive(serde::Serialize, serde::Deserialize, PartialEq, Eq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
 #[serde(untagged)]
 pub enum Update {
     Change(Change),
     PR(PR),
 }
 
-#[derive(serde::Serialize, serde::Deserialize, PartialEq, Eq, Debug)]
-pub struct Config {
-    pub repo: String,
-    pub branch: String,
-    pub upstream: Upstream,
+#[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
+pub struct Fork {
+    pub name: String,
+    pub target: Repo,
+    pub upstream: Repo,
     pub changes: Vec<Update>,
 }
 
-impl Config {
+impl Fork {
     pub fn parse_github(&self) -> Result<(String, String)> {
         let re = regex::Regex::new(r"github.com/([^/]+)/([^/]+)")?;
         let caps = re
-            .captures(&self.upstream.repo)
-            .ok_or(Error::GithubParseError(self.upstream.repo.clone()))?;
+            .captures(&self.upstream.url)
+            .ok_or(Error::GithubParseError(self.upstream.url.clone()))?;
         Ok((caps[1].to_string(), caps[2].to_string()))
     }
 
@@ -80,16 +79,34 @@ impl Config {
 
     pub fn get_upstream_branch(&mut self) {
         if self.upstream.branch.is_none() {
-            self.upstream.branch = Some(self.branch.clone());
+            if let Some(branch) = &self.target.branch {
+                self.upstream.branch = Some(branch.clone());
+            }
         }
     }
+}
 
+#[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
+pub struct Config {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config: Option<Repo>,
+    pub forks: Vec<Fork>,
+}
+
+impl Config {
     pub async fn new() -> Result<Self> {
         let config = File::open(find_config_file()?)?;
         let mut config: Self = serde_yml::from_reader(config)?;
-        config.get_prs().await?;
-        config.get_upstream_branch();
+        config.update().await?;
         Ok(config)
+    }
+
+    pub async fn update(&mut self) -> Result<()> {
+        for fork in &mut self.forks {
+            fork.get_prs().await?;
+            fork.get_upstream_branch();
+        }
+        Ok(())
     }
 }
 
