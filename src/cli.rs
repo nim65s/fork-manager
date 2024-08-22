@@ -41,6 +41,10 @@ pub struct Args {
     #[arg(long = "generate", value_enum)]
     pub generator: Option<clap_complete::Shell>,
 
+    /// Only check config, don't run git commands
+    #[arg(short, long)]
+    pub dry_run: bool,
+
     /// Really force push: deactivate dry run.
     #[arg(long)]
     pub push: bool,
