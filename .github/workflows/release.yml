@@ -1,13 +1,10 @@
 name: Release
-
 permissions:
   contents: write
-
 on:
   push:
     tags:
       - v[0-9]+.*
-
 jobs:
   create-release:
     runs-on: ubuntu-latest
@@ -17,7 +14,6 @@ jobs:
         with:
           changelog: CHANGELOG.md
           token: ${{ secrets.GITHUB_TOKEN }}
-
   upload-assets:
     strategy:
       matrix:

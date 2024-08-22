@@ -1,8 +1,6 @@
 name: "Nix CI"
-
 on:
   push:
-
 jobs:
   tests:
     name: "Nix build on ${{ matrix.os }}"

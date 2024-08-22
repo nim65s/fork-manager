@@ -1,11 +1,8 @@
 name: CI
-
 on:
   push:
-
 env:
   CARGO_TERM_COLOR: always
-
 jobs:
   ci:
     name: CI

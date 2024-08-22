@@ -40,12 +40,14 @@
             projectRootFile = "flake.nix";
             programs = {
               deadnix.enable = true;
+              mdformat.enable = true;
               nixfmt-rfc-style.enable = true;
               rustfmt.enable = true;
               toml-sort = {
                 enable = true;
                 all = true;
               };
+              yamlfmt.enable = true;
             };
           };
         };
