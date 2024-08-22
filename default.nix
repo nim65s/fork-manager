@@ -1,4 +1,4 @@
-{ lib, rustPlatform }:
+{ lib, rustPlatform, darwin }:
 
 rustPlatform.buildRustPackage {
   pname = "fork-manager";
@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage {
   };
 
   cargoLock.lockFile = ./Cargo.lock;
+
+  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   checkFlags = [
     # This require network access
