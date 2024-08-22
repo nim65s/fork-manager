@@ -76,9 +76,7 @@ fn test_serde() {
             },
         ],
     };
-    //assert_eq!(config, serde_yml::from_str(yaml).unwrap());
-    println!("{}", serde_yml::to_string(&config).unwrap());
-    println!("{}", yaml);
+    assert_eq!(config, serde_yml::from_str(yaml).unwrap());
     assert_eq!(serde_yml::to_string(&config).unwrap(), yaml);
 }
 

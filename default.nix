@@ -1,8 +1,10 @@
 {
+  installShellFiles,
   lib,
   rustPlatform,
   darwin,
   stdenv,
+  mainProgram ? "fork-manager",
 }:
 
 rustPlatform.buildRustPackage {
@@ -23,12 +25,22 @@ rustPlatform.buildRustPackage {
 
   buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
+  nativeBuildInputs = [ installShellFiles ];
+
   checkFlags = [
     # This require network access
     "--skip=pr_to_change"
   ];
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd fork-manager \
+      --bash <($out/bin/${mainProgram} --generate bash) \
+      --fish <($out/bin/${mainProgram} --generate fish) \
+      --zsh <($out/bin/${mainProgram} --generate zsh)
+  '';
+
   meta = {
+    inherit mainProgram;
     description = "Automatize your fork";
     homepage = "https://github.com/nim65s/fork-manager";
     changelog = "https://github.com/nim65s/fork-manager/blob/main/CHANGELOG.md";
@@ -37,6 +49,5 @@ rustPlatform.buildRustPackage {
       mit
     ];
     maintainers = with lib.maintainers; [ nim65s ];
-    mainProgram = "fork-manager";
   };
 }
