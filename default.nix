@@ -1,6 +1,9 @@
 {
   installShellFiles,
   lib,
+  libgit2,
+  openssl,
+  pkg-config,
   rustPlatform,
   darwin,
   stdenv,
@@ -23,9 +26,10 @@ rustPlatform.buildRustPackage {
 
   cargoLock.lockFile = ./Cargo.lock;
 
-  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security
+  ++ [ libgit2 openssl ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
   checkFlags = [
     # This require network access

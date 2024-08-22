@@ -1,12 +1,13 @@
 use std::fs::File;
 
+use git2::Repository;
+use serde::{Deserialize, Serialize};
+
 mod cli;
 mod error;
 
 pub use cli::{print_completions, Args};
 pub use error::{Error, Result};
-
-use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
 pub struct Repo {
@@ -101,8 +102,12 @@ impl Fork {
         }
     }
 
-    pub async fn process(&self, config: &Option<Repo>) -> Result<()> {
-        println!("process {} with {config:?}", self.name);
+    pub async fn process(&self, config: &Option<Repo>, repo: &mut Repository) -> Result<()> {
+        println!(
+            "process {} with {config:?} in {:?}",
+            self.name,
+            repo.workdir()
+        );
         Ok(())
     }
 }
@@ -131,12 +136,10 @@ impl Config {
     }
 
     pub async fn process(&self, args: &Args) -> Result<()> {
-        println!("+ pushd {:?}", &args.project);
-        let _pd = pushd::Pushd::new(&args.project);
+        let mut repo = Repository::open(&args.project)?;
         for fork in &self.forks {
-            fork.process(&self.config).await?;
+            fork.process(&self.config, &mut repo).await?;
         }
-        println!("+ popd");
         Ok(())
     }
 }
