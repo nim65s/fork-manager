@@ -100,6 +100,11 @@ impl Fork {
             }
         }
     }
+
+    pub async fn process(&self, config: &Option<Repo>) -> Result<()> {
+        println!("process {} with {config:?}", self.name);
+        Ok(())
+    }
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
@@ -122,6 +127,16 @@ impl Config {
             fork.get_prs().await?;
             fork.fill();
         }
+        Ok(())
+    }
+
+    pub async fn process(&self, args: &Args) -> Result<()> {
+        println!("+ pushd {:?}", &args.project);
+        let _pd = pushd::Pushd::new(&args.project);
+        for fork in &self.forks {
+            fork.process(&self.config).await?;
+        }
+        println!("+ popd");
         Ok(())
     }
 }

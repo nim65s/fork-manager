@@ -1,10 +1,13 @@
+use clap::Parser;
+
 use fork_manager::{Args, Config};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    if let Some(args) = Args::get()? {
+    let mut args = Args::parse();
+    if args.process()? {
         let config = Config::new(&args).await?;
-        dbg!(config);
+        config.process(&args).await?;
     }
     Ok(())
 }

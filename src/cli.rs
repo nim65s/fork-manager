@@ -1,5 +1,5 @@
 use super::{Error, Result};
-use clap::{CommandFactory, Parser};
+use clap::CommandFactory;
 use std::path::{Path, PathBuf};
 
 #[derive(clap::Parser, Debug)]
@@ -47,17 +47,23 @@ pub struct Args {
 }
 
 impl Args {
-    pub fn get() -> Result<Option<Self>> {
-        let mut args = Args::parse();
-        if let Some(generator) = args.generator {
+    pub fn process(&mut self) -> Result<bool> {
+        if let Some(generator) = self.generator {
             let mut cmd = Args::command();
             print_completions(generator, &mut cmd);
-            Ok(None)
+            Ok(false)
         } else {
-            if !args.config_file.is_file() {
-                args.config_file = find_config_file(&args.project, &args.filename)?;
+            if !self.config_file.is_file() {
+                self.config_file = find_config_file(&self.project, &self.filename)?;
             }
-            Ok(Some(args))
+
+            // now that we have a proper canonical config_file, we can ensure project root
+            for ancestor in self.config_file.ancestors() {
+                if self.config_file == ancestor.join(&self.filename) {
+                    self.project = ancestor.to_path_buf();
+                }
+            }
+            Ok(true)
         }
     }
 }

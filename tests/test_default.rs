@@ -1,5 +1,25 @@
-use fork_manager::{Change, Config, Fork, Repo, Update, PR};
+use clap::Parser;
 use indoc::indoc;
+use std::path::PathBuf;
+
+use fork_manager::{Args, Change, Config, Fork, Repo, Update, PR};
+
+#[test]
+fn test_cli() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+
+    let mut args = Args::parse_from(["fork-manager", "-p", "tests"]);
+    args.process().unwrap();
+    assert_eq!(args.project, root.join("tests"));
+
+    let mut args = Args::parse_from(["fork-manager", "-f", "tests/fork-manager.yaml"]);
+    args.process().unwrap();
+    assert_eq!(args.project, root);
+
+    let mut args = Args::parse_from(["fork-manager", "-p", "tests/empty"]);
+    args.process().unwrap();
+    assert_eq!(args.project, root.join("tests"));
+}
 
 #[test]
 fn test_serde() {

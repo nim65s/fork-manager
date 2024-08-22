@@ -315,6 +315,7 @@ dependencies = [
  "clap_complete",
  "indoc",
  "octocrab",
+ "pushd",
  "regex",
  "serde",
  "serde_yml",
@@ -902,6 +903,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5e719e8df665df0d1c8fbfd238015744736151d4445ec0836b8e628aae103b77"
 dependencies = [
  "unicode-ident",
+]
+
+[[package]]
+name = "pushd"
+version = "0.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "54652e89ed86f16983916c7d80cd34df27cc6c82edba43d51117f85ef2a97390"
+dependencies = [
+ "log",
+ "thiserror",
 ]
 
 [[package]]
