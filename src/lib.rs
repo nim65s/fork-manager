@@ -1,6 +1,6 @@
 mod cli;
 mod error;
-pub use cli::Args;
+pub use cli::{print_completions, Args};
 pub use error::{Error, Result};
 use std::fs::File;
 use std::path::PathBuf;
