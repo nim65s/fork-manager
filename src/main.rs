@@ -7,7 +7,9 @@ async fn main() -> anyhow::Result<()> {
     let mut args = Args::parse();
     if args.process()? {
         let config = Config::new(&args).await?;
-        if !&args.dry_run {
+        if args.dry_run {
+            dbg!(config);
+        } else {
             config.process(&args).await?;
         }
     }
