@@ -17,7 +17,8 @@ pub struct Repo {
 
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
 pub struct Change {
-    pub title: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
     pub url: String,
     pub branch: String,
 }
@@ -31,9 +32,6 @@ impl PR {
     pub async fn to_change(&self, owner: String, repo: String) -> Result<Change> {
         let pr = octocrab::instance().pulls(owner, repo).get(self.pr).await?;
         // TODO if state == "closed", we should be able dismiss it
-        let title = pr
-            .title
-            .ok_or(Error::GithubParseError("Missing PR title".to_string()))?;
         let url = pr
             .head
             .repo
@@ -42,6 +40,7 @@ impl PR {
             .ok_or(Error::GithubParseError("Missing repo html url".to_string()))?
             .to_string();
         let branch = pr.head.ref_field;
+        let title = Some(pr.title.unwrap_or(branch.clone()));
         Ok(Change { title, url, branch })
     }
 }
@@ -80,10 +79,24 @@ impl Fork {
         Ok(())
     }
 
-    pub fn get_upstream_branch(&mut self) {
+    pub fn fill(&mut self) {
+        // When upstream branch is not provided, we can use target branch
         if self.upstream.branch.is_none() {
             if let Some(branch) = &self.target.branch {
                 self.upstream.branch = Some(branch.clone());
+            }
+        }
+        // when change title is not provided, we can use branch name
+        for item in &mut self.changes {
+            if let Update::Change(change) = item {
+                if let Change {
+                    title: None,
+                    url: _,
+                    branch,
+                } = change
+                {
+                    change.title = Some(branch.to_string());
+                }
             }
         }
     }
@@ -107,7 +120,7 @@ impl Config {
     pub async fn update(&mut self) -> Result<()> {
         for fork in &mut self.forks {
             fork.get_prs().await?;
-            fork.get_upstream_branch();
+            fork.fill();
         }
         Ok(())
     }

@@ -22,7 +22,7 @@ forks:
     repo: https://github.com/NixOS/nixpkgs
     branch: master  # Same as target branch if not specified
   changes:
-  - title: Package HPP
+  - title: Package HPP  # default to branch name if not specified
     repo: https://github.com/nim65s/nixpkgs
     branch: hpp
   - pr: 331343  # get title + repo + branch from upstream github PR

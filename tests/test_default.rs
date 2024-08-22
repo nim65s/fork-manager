@@ -28,8 +28,7 @@ fn test_serde() {
             url: https://github.com/gepetto/nixpkgs
             branch: master
           changes:
-          - title: prepare renaming hpp-fcl to coal
-            url: https://github.com/nim65s/nixpkgs
+          - url: https://github.com/nim65s/nixpkgs
             branch: coal
         "};
 
@@ -51,7 +50,7 @@ fn test_serde() {
                 },
                 changes: vec![
                     Update::Change(Change {
-                        title: "Package HPP".to_string(),
+                        title: Some("Package HPP".to_string()),
                         url: "https://github.com/nim65s/nixpkgs".to_string(),
                         branch: "hpp".to_string(),
                     }),
@@ -69,7 +68,7 @@ fn test_serde() {
                     branch: Some("master".to_string()),
                 },
                 changes: vec![Update::Change(Change {
-                    title: "prepare renaming hpp-fcl to coal".to_string(),
+                    title: None,
                     url: "https://github.com/nim65s/nixpkgs".to_string(),
                     branch: "coal".to_string(),
                 })],
@@ -91,8 +90,7 @@ async fn test_pr_to_change() {
           upstream:
             url: https://github.com/NixOS/nixpkgs
           changes:
-          - title: Package HPP
-            url: https://github.com/nim65s/nixpkgs
+          - url: https://github.com/nim65s/nixpkgs
             branch: hpp
           - pr: 331343
         "};
@@ -106,7 +104,7 @@ async fn test_pr_to_change() {
             url: https://github.com/NixOS/nixpkgs
             branch: master
           changes:
-          - title: Package HPP
+          - title: hpp
             url: https://github.com/nim65s/nixpkgs
             branch: hpp
           - title: 'casadi: init at 3.6.6'
@@ -127,7 +125,7 @@ async fn test_pr_to_change() {
             },
             changes: vec![
                 Update::Change(Change {
-                    title: "Package HPP".to_string(),
+                    title: None,
                     url: "https://github.com/nim65s/nixpkgs".to_string(),
                     branch: "hpp".to_string(),
                 }),
@@ -149,12 +147,12 @@ async fn test_pr_to_change() {
             },
             changes: vec![
                 Update::Change(Change {
-                    title: "Package HPP".to_string(),
+                    title: Some("hpp".to_string()),
                     url: "https://github.com/nim65s/nixpkgs".to_string(),
                     branch: "hpp".to_string(),
                 }),
                 Update::Change(Change {
-                    title: "casadi: init at 3.6.6".to_string(),
+                    title: Some("casadi: init at 3.6.6".to_string()),
                     url: "https://github.com/nim65s/nixpkgs".to_string(),
                     branch: "casadi".to_string(),
                 }),
