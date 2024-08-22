@@ -8,7 +8,7 @@ async fn main() -> anyhow::Result<()> {
         let mut cmd = Args::command();
         print_completions(generator, &mut cmd);
     } else {
-        let config = Config::new(args).await?;
+        let config = Config::new(&args).await?;
         dbg!(config);
     }
     Ok(())
