@@ -102,8 +102,16 @@ impl Fork {
         }
     }
 
-    pub async fn process(&mut self, _config: &Option<Repo>) -> Result<()> {
-        Ok(())
+    pub fn generate(&mut self, _config: &Option<Repo>) -> String {
+        let script = vec![
+            format!("if ! test -d {}", self.name),
+            format!("then git submodule add {} {}", self.target.url, self.name),
+            "fi".to_string(),
+            format!("pushd {}", self.name),
+            "if ! git remote | grep -q origin".to_string(),
+            "popd".to_string(),
+        ];
+        script.join("\n")
     }
 }
 
@@ -130,10 +138,19 @@ impl Config {
         Ok(())
     }
 
-    pub async fn process(&mut self, args: &Args) -> Result<()> {
+    pub fn generate(&mut self, args: &Args) -> String {
+        let mut script = vec![
+            "#!/usr/bin/env bash",
+            "set -euo pipefail",
+            "",
+            "# https://stackoverflow.com/a/246128/1368502",
+            "SCRIPT_DIR=$( cd -- \"$( dirname -- \"${BASH_SOURCE[0]}\" )\" &> /dev/null && pwd )",
+            "pushd \"$SCRIPT_DIR\"",
+            "",
+        ];
         for fork in &mut self.forks {
-            fork.process(&self.config).await?;
+            script.append(fork.generate(&self.config));
         }
-        Ok(())
+        script.join("\n")
     }
 }

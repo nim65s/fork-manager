@@ -10,7 +10,7 @@ async fn main() -> anyhow::Result<()> {
         if args.dry_run {
             dbg!(config);
         } else {
-            config.process(&args).await?;
+            config.generate(&args)?;
         }
     }
     Ok(())
