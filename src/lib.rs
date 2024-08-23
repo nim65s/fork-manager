@@ -1,7 +1,6 @@
 use std::fs::File;
 use std::path::Path;
 
-use git2::Repository;
 use serde::{Deserialize, Serialize};
 
 mod cli;
@@ -103,29 +102,7 @@ impl Fork {
         }
     }
 
-    pub async fn process(&mut self, _config: &Option<Repo>, repo: &mut Repository) -> Result<()> {
-        let mut sub = match repo.find_submodule(&self.name) {
-            Ok(sub) => {
-                //todo : sub set target
-                sub
-            }
-            _ => repo.submodule(&self.target.url, Path::new(&self.name), false)?,
-        };
-        let current = sub.open()?;
-        let mut target = match current.find_remote("upstream") {
-            Ok(tgt) => {
-                // todo: set tgt
-                tgt
-            }
-            _ => current.remote("target", &self.target.url)?,
-        };
-        let target_branch = self.target.branch.clone().unwrap();
-        target.fetch(&[target_branch], None, None)?;
-        let mut upstream = current.remote("upstream", &self.upstream.url)?;
-        let upstream_branch = self.upstream.branch.clone().unwrap();
-        upstream.fetch(&[upstream_branch], None, None)?;
-        //current.branch(&self.target.branch, &self.upstream.)?;
-        sub.add_finalize()?;
+    pub async fn process(&mut self, _config: &Option<Repo>) -> Result<()> {
         Ok(())
     }
 }
@@ -154,9 +131,8 @@ impl Config {
     }
 
     pub async fn process(&mut self, args: &Args) -> Result<()> {
-        let mut repo = Repository::open(&args.project)?;
         for fork in &mut self.forks {
-            fork.process(&self.config, &mut repo).await?;
+            fork.process(&self.config).await?;
         }
         Ok(())
     }

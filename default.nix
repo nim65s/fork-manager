@@ -2,9 +2,7 @@
   darwin,
   installShellFiles,
   lib,
-  libgit2,
   mainProgram ? "fork-manager",
-  openssl,
   pkg-config,
   rustPlatform,
   stdenv,
@@ -26,10 +24,7 @@ rustPlatform.buildRustPackage {
 
   cargoLock.lockFile = ./Cargo.lock;
 
-  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security ++ [
-    libgit2
-    openssl
-  ];
+  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   nativeBuildInputs = [
     installShellFiles

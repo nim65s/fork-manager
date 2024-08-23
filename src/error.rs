@@ -17,9 +17,6 @@ pub enum Error {
 
     #[error("Can't find fork-manager.yaml in {0}")]
     NotFound(std::path::PathBuf),
-
-    #[error("Git error: {0}")]
-    Git(#[from] git2::Error),
 }
 
 pub type Result<T> = core::result::Result<T, Error>;
