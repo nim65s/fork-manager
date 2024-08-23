@@ -2,6 +2,7 @@
 anyhow = "1.0.86"
 clap = {features = ["derive", "env"], version = "4.5.16"}
 clap_complete = "4.5.22"
+minijinja = "2.1.2"
 octocrab = "0.39.0"
 regex = "1.10.6"
 serde = {features = ["derive"], version = "1.0.208"}
