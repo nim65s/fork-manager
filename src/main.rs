@@ -6,7 +6,7 @@ use fork_manager::{Args, Config};
 async fn main() -> anyhow::Result<()> {
     let mut args = Args::parse();
     if args.process()? {
-        let config = Config::new(&args).await?;
+        let mut config = Config::new(&args).await?;
         if args.dry_run {
             dbg!(config);
         } else {

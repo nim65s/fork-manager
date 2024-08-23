@@ -1,4 +1,5 @@
 use std::fs::File;
+use std::path::Path;
 
 use git2::Repository;
 use serde::{Deserialize, Serialize};
@@ -63,7 +64,7 @@ pub struct Fork {
 
 impl Fork {
     pub fn parse_github(&self) -> Result<(String, String)> {
-        let re = regex::Regex::new(r"github.com/([^/]+)/([^/]+)")?;
+        let re = regex::Regex::new(r"github.com[/:]([^/]+)/([^/]+)")?;
         let caps = re
             .captures(&self.upstream.url)
             .ok_or(Error::GithubParseError(self.upstream.url.clone()))?;
@@ -102,12 +103,29 @@ impl Fork {
         }
     }
 
-    pub async fn process(&self, config: &Option<Repo>, repo: &mut Repository) -> Result<()> {
-        println!(
-            "process {} with {config:?} in {:?}",
-            self.name,
-            repo.workdir()
-        );
+    pub async fn process(&mut self, _config: &Option<Repo>, repo: &mut Repository) -> Result<()> {
+        let mut sub = match repo.find_submodule(&self.name) {
+            Ok(sub) => {
+                //todo : sub set target
+                sub
+            }
+            _ => repo.submodule(&self.target.url, Path::new(&self.name), false)?,
+        };
+        let current = sub.open()?;
+        let mut target = match current.find_remote("upstream") {
+            Ok(tgt) => {
+                // todo: set tgt
+                tgt
+            }
+            _ => current.remote("target", &self.target.url)?,
+        };
+        let target_branch = self.target.branch.clone().unwrap();
+        target.fetch(&[target_branch], None, None)?;
+        let mut upstream = current.remote("upstream", &self.upstream.url)?;
+        let upstream_branch = self.upstream.branch.clone().unwrap();
+        upstream.fetch(&[upstream_branch], None, None)?;
+        //current.branch(&self.target.branch, &self.upstream.)?;
+        sub.add_finalize()?;
         Ok(())
     }
 }
@@ -135,9 +153,9 @@ impl Config {
         Ok(())
     }
 
-    pub async fn process(&self, args: &Args) -> Result<()> {
+    pub async fn process(&mut self, args: &Args) -> Result<()> {
         let mut repo = Repository::open(&args.project)?;
-        for fork in &self.forks {
+        for fork in &mut self.forks {
             fork.process(&self.config, &mut repo).await?;
         }
         Ok(())
