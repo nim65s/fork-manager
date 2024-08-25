@@ -8,7 +8,7 @@
     };
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     treefmt-nix = {
-      url = "github:nim65s/treefmt-nix"; # https://github.com/numtide/treefmt-nix/pull/224
+      url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

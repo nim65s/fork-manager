@@ -41,6 +41,7 @@ forks:
 
 This configure the gepetto/forks github project, which manage the `gepetto-nixpkgs-master` and `gepetto-nixpkgs-devel`
 forks:
+
 - The first takes github:NixOS/nixpkgs/master, merge one branch and one PR, and force push that to github:gepetto/nixpkgs/master.
 - Thes second take this fresh github:gepetto/nixpkgs/master, merge an additinal branch, and force push that to github:gepetto/nixpkgs/devel.
 
