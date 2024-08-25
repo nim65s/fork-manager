@@ -1,6 +1,8 @@
+use std::collections::HashSet;
 use std::fs::File;
-use std::path::Path;
 
+use minijinja::syntax::SyntaxConfig;
+use minijinja::{context, Environment};
 use serde::{Deserialize, Serialize};
 
 mod cli;
@@ -31,15 +33,22 @@ pub struct PR {
 
 impl PR {
     pub async fn to_change(&self, owner: String, repo: String) -> Result<Change> {
-        let pr = octocrab::instance().pulls(owner, repo).get(self.pr).await?;
+        let mut octo = octocrab::Octocrab::builder();
+        if let Ok(token) = std::env::var("GITHUB_TOKEN") {
+            octo = octo.personal_token(token)
+        }
+        let pr = octo.build()?.pulls(owner, repo).get(self.pr).await?;
         // TODO if state == "closed", we should be able dismiss it
-        let url = pr
+        let mut url = pr
             .head
             .repo
             .ok_or(Error::GithubParseError("Missing repo head".to_string()))?
-            .html_url
+            .ssh_url
             .ok_or(Error::GithubParseError("Missing repo html url".to_string()))?
             .to_string();
+        if let Some(strip) = url.strip_suffix(".git") {
+            url = strip.to_string();
+        }
         let branch = pr.head.ref_field;
         let title = Some(pr.title.unwrap_or(branch.clone()));
         Ok(Change { title, url, branch })
@@ -101,18 +110,6 @@ impl Fork {
             }
         }
     }
-
-    pub fn generate(&mut self, _config: &Option<Repo>) -> String {
-        let script = vec![
-            format!("if ! test -d {}", self.name),
-            format!("then git submodule add {} {}", self.target.url, self.name),
-            "fi".to_string(),
-            format!("pushd {}", self.name),
-            "if ! git remote | grep -q origin".to_string(),
-            "popd".to_string(),
-        ];
-        script.join("\n")
-    }
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
@@ -138,19 +135,49 @@ impl Config {
         Ok(())
     }
 
-    pub fn generate(&mut self, args: &Args) -> String {
-        let mut script = vec![
-            "#!/usr/bin/env bash",
-            "set -euo pipefail",
-            "",
-            "# https://stackoverflow.com/a/246128/1368502",
-            "SCRIPT_DIR=$( cd -- \"$( dirname -- \"${BASH_SOURCE[0]}\" )\" &> /dev/null && pwd )",
-            "pushd \"$SCRIPT_DIR\"",
-            "",
-        ];
-        for fork in &mut self.forks {
-            script.append(fork.generate(&self.config));
+    pub fn remotes(&self) -> String {
+        let mut remotes = HashSet::new();
+        for fork in &self.forks {
+            remotes.insert(fork.target.url.clone());
+            remotes.insert(fork.upstream.url.clone());
+            for update in &fork.changes {
+                if let Update::Change(change) = update {
+                    remotes.insert(change.url.clone());
+                }
+            }
         }
-        script.join("\n")
+        remotes.into_iter().collect::<Vec<String>>().join(" ")
     }
+
+    pub fn generate(&mut self, args: &Args) -> Result<()> {
+        // use a syntax which won't mess too much with bash for shellcheck
+        let syntax = SyntaxConfig::builder()
+            .block_delimiters("#{", "}#")
+            .variable_delimiters("'{", "}'")
+            .comment_delimiters("#/*", "#*/")
+            .build()?;
+        let mut env = Environment::new();
+        env.set_syntax(syntax);
+        env.add_filter("remote_name", remote_name);
+        env.add_template("update.sh", include_str!("update.sh"))?;
+        let tmpl = env.get_template("update.sh").unwrap();
+        println!(
+            "{}",
+            tmpl.render(context! {
+                config => self.config,
+                forks => self.forks,
+                remotes => self.remotes(),
+                push => args.push,
+            })
+            .unwrap()
+        );
+        Ok(())
+    }
+}
+
+pub fn remote_name(value: String) -> String {
+    value
+        .replace("https://", "")
+        .replace("git@", "")
+        .replace(":", "/")
 }

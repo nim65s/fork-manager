@@ -12,6 +12,9 @@ pub enum Error {
     #[error("octocrab error: {0}")]
     Octocrab(#[from] octocrab::Error),
 
+    #[error("minijinja error: {0}")]
+    MiniJinja(#[from] minijinja::Error),
+
     #[error("Can't parse owner/repo from this github url: {0}")]
     GithubParseError(String),
 

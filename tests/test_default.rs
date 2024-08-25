@@ -25,53 +25,53 @@ fn test_cli() {
 fn test_serde() {
     let yaml = indoc! {"
         config:
-          url: https://github.com/gepetto/forks
+          url: git@github.com:gepetto/forks
           branch: master
         forks:
         - name: gepetto-nixpkgs-master
           target:
-            url: https://github.com/gepetto/nixpkgs
+            url: git@github.com:gepetto/nixpkgs
             branch: master
           upstream:
-            url: https://github.com/NixOS/nixpkgs
+            url: git@github.com:NixOS/nixpkgs
             branch: master
           changes:
           - title: Package HPP
-            url: https://github.com/nim65s/nixpkgs
+            url: git@github.com:nim65s/nixpkgs
             branch: hpp
           - pr: 331343
         - name: gepetto-nixpkgs-devel
           target:
-            url: https://github.com/gepetto/nixpkgs
+            url: git@github.com:gepetto/nixpkgs
             branch: devel
           upstream:
-            url: https://github.com/gepetto/nixpkgs
+            url: git@github.com:gepetto/nixpkgs
             branch: master
           changes:
-          - url: https://github.com/nim65s/nixpkgs
+          - url: git@github.com:nim65s/nixpkgs
             branch: coal
         "};
 
     let config = Config {
         config: Some(Repo {
-            url: "https://github.com/gepetto/forks".to_string(),
+            url: "git@github.com:gepetto/forks".to_string(),
             branch: Some("master".to_string()),
         }),
         forks: vec![
             Fork {
                 name: "gepetto-nixpkgs-master".to_string(),
                 target: Repo {
-                    url: "https://github.com/gepetto/nixpkgs".to_string(),
+                    url: "git@github.com:gepetto/nixpkgs".to_string(),
                     branch: Some("master".to_string()),
                 },
                 upstream: Repo {
-                    url: "https://github.com/NixOS/nixpkgs".to_string(),
+                    url: "git@github.com:NixOS/nixpkgs".to_string(),
                     branch: Some("master".to_string()),
                 },
                 changes: vec![
                     Update::Change(Change {
                         title: Some("Package HPP".to_string()),
-                        url: "https://github.com/nim65s/nixpkgs".to_string(),
+                        url: "git@github.com:nim65s/nixpkgs".to_string(),
                         branch: "hpp".to_string(),
                     }),
                     Update::PR(PR { pr: 331343 }),
@@ -80,16 +80,16 @@ fn test_serde() {
             Fork {
                 name: "gepetto-nixpkgs-devel".to_string(),
                 target: Repo {
-                    url: "https://github.com/gepetto/nixpkgs".to_string(),
+                    url: "git@github.com:gepetto/nixpkgs".to_string(),
                     branch: Some("devel".to_string()),
                 },
                 upstream: Repo {
-                    url: "https://github.com/gepetto/nixpkgs".to_string(),
+                    url: "git@github.com:gepetto/nixpkgs".to_string(),
                     branch: Some("master".to_string()),
                 },
                 changes: vec![Update::Change(Change {
                     title: None,
-                    url: "https://github.com/nim65s/nixpkgs".to_string(),
+                    url: "git@github.com:nim65s/nixpkgs".to_string(),
                     branch: "coal".to_string(),
                 })],
             },
@@ -105,12 +105,12 @@ async fn test_pr_to_change() {
         forks:
         - name: my-fork
           target:
-            url: https://github.com/gepetto/nixpkgs
+            url: git@github.com:gepetto/nixpkgs
             branch: master
           upstream:
-            url: https://github.com/NixOS/nixpkgs
+            url: git@github.com:NixOS/nixpkgs
           changes:
-          - url: https://github.com/nim65s/nixpkgs
+          - url: git@github.com:nim65s/nixpkgs
             branch: hpp
           - pr: 331343
         "};
@@ -118,17 +118,17 @@ async fn test_pr_to_change() {
         forks:
         - name: my-fork
           target:
-            url: https://github.com/gepetto/nixpkgs
+            url: git@github.com:gepetto/nixpkgs
             branch: master
           upstream:
-            url: https://github.com/NixOS/nixpkgs
+            url: git@github.com:NixOS/nixpkgs
             branch: master
           changes:
           - title: hpp
-            url: https://github.com/nim65s/nixpkgs
+            url: git@github.com:nim65s/nixpkgs
             branch: hpp
           - title: 'casadi: init at 3.6.6'
-            url: https://github.com/nim65s/nixpkgs
+            url: git@github.com:nim65s/nixpkgs
             branch: casadi
         "};
     let mut config_from = Config {
@@ -136,17 +136,17 @@ async fn test_pr_to_change() {
         forks: vec![Fork {
             name: "my-fork".to_string(),
             target: Repo {
-                url: "https://github.com/gepetto/nixpkgs".to_string(),
+                url: "git@github.com:gepetto/nixpkgs".to_string(),
                 branch: Some("master".to_string()),
             },
             upstream: Repo {
-                url: "https://github.com/NixOS/nixpkgs".to_string(),
+                url: "git@github.com:NixOS/nixpkgs".to_string(),
                 branch: None,
             },
             changes: vec![
                 Update::Change(Change {
                     title: None,
-                    url: "https://github.com/nim65s/nixpkgs".to_string(),
+                    url: "git@github.com:nim65s/nixpkgs".to_string(),
                     branch: "hpp".to_string(),
                 }),
                 Update::PR(PR { pr: 331343 }),
@@ -158,22 +158,22 @@ async fn test_pr_to_change() {
         forks: vec![Fork {
             name: "my-fork".to_string(),
             target: Repo {
-                url: "https://github.com/gepetto/nixpkgs".to_string(),
+                url: "git@github.com:gepetto/nixpkgs".to_string(),
                 branch: Some("master".to_string()),
             },
             upstream: Repo {
-                url: "https://github.com/NixOS/nixpkgs".to_string(),
+                url: "git@github.com:NixOS/nixpkgs".to_string(),
                 branch: Some("master".to_string()),
             },
             changes: vec![
                 Update::Change(Change {
                     title: Some("hpp".to_string()),
-                    url: "https://github.com/nim65s/nixpkgs".to_string(),
+                    url: "git@github.com:nim65s/nixpkgs".to_string(),
                     branch: "hpp".to_string(),
                 }),
                 Update::Change(Change {
                     title: Some("casadi: init at 3.6.6".to_string()),
-                    url: "https://github.com/nim65s/nixpkgs".to_string(),
+                    url: "git@github.com:nim65s/nixpkgs".to_string(),
                     branch: "casadi".to_string(),
                 }),
             ],
