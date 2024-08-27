@@ -139,7 +139,9 @@ impl Config {
                 }
             }
         }
-        remotes.into_iter().collect::<Vec<String>>().join(" ")
+        let mut vec = remotes.into_iter().collect::<Vec<String>>();
+        vec.sort();
+        vec.join(" ")
     }
 
     pub fn generate(&mut self, args: &Args) -> Result<()> {
