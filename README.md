@@ -56,12 +56,19 @@ Automatize your fork
 Usage: fork-manager [OPTIONS]
 
 Options:
-  -c, --config-file <CONFIG_FILE>  Path to the configuration file. If not given, or not a file, this will be searched according to arguments "project" and "filename" [env: FORK_MANAGER_CONFIG_FILE=] [default: ./fork-manager.yaml]
-  -f, --filename <FILENAME>        Name of the configuration file to look for [env: FORK_MANAGER_CONFIG_FILENAME=] [default: fork-manager.yaml]
-  -p, --project <PROJECT>          Path to the project where to look for [env: FORK_MANAGER_PROJECT=] [default: .]
-      --generate <GENERATOR>       If provided, outputs the completion file for given shell and exit [possible values: bash, elvish, fish, powershell, zsh]
-  -d, --dry-run                    Only check config, don't run git commands
-      --push                       Really force push: deactivate dry run
-  -h, --help                       Print help
-  -V, --version                    Print version
+  -c, --config-file <CONFIG_FILE>      Path to the configuration file. If not given, or not a file, this will be
+                                       searched according to arguments "project" and "filename"
+                                       [env: FORK_MANAGER_CONFIG_FILE=] [default: ./fork-manager.yaml]
+  -f, --filename <FILENAME>            Name of the configuration file to look for
+                                       [env: FORK_MANAGER_CONFIG_FILENAME=] [default: fork-manager.yaml]
+  -p, --project <PROJECT>              Path to the project where to look for
+                                       [env: FORK_MANAGER_PROJECT=] [default: .]
+  -u, --update-script <UPDATE_SCRIPT>  Name of the script to generate
+                                       [env: FORK_MANAGER_UPDATE_SCRIPT=] [default: update.sh]
+      --generate <GENERATOR>           If provided, outputs the completion file for given shell and exit
+                                       [possible values: bash, elvish, fish, powershell, zsh]
+  -d, --dry-run                        Only check config, don't run git commands
+      --push                           Do actually force push
+  -h, --help                           Print help
+  -V, --version                        Print version
 ```
