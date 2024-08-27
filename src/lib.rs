@@ -1,15 +1,15 @@
 use std::collections::HashSet;
 use std::fs::File;
 
-use minijinja::syntax::SyntaxConfig;
-use minijinja::{context, Environment};
 use serde::{Deserialize, Serialize};
 
 mod cli;
 mod error;
+pub mod template;
 
 pub use cli::{print_completions, Args};
 pub use error::{Error, Result};
+pub use template::generate;
 
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
 pub struct Repo {
@@ -145,13 +145,6 @@ impl Config {
     }
 }
 
-pub fn remote_name(value: String) -> String {
-    value
-        .replace("https://", "")
-        .replace("git@", "")
-        .replace(":", "/")
-}
-
 pub struct ForkManager {
     args: Args,
     config: Config,
@@ -170,34 +163,9 @@ impl ForkManager {
             if self.args.dry_run {
                 dbg!(&self.config);
             } else {
-                self.generate()?;
+                generate(self)?;
             }
         }
-        Ok(())
-    }
-
-    pub fn generate(&mut self) -> Result<()> {
-        // use a syntax which won't mess too much with bash for shellcheck
-        let syntax = SyntaxConfig::builder()
-            .block_delimiters("#{", "}#")
-            .variable_delimiters("'{", "}'")
-            .comment_delimiters("#/*", "#*/")
-            .build()?;
-        let mut env = Environment::new();
-        env.set_syntax(syntax);
-        env.add_filter("remote_name", remote_name);
-        env.add_template("update.sh", include_str!("update.sh"))?;
-        let tmpl = env.get_template("update.sh").unwrap();
-        println!(
-            "{}",
-            tmpl.render(context! {
-                config => self.config.config,
-                forks => self.config.forks,
-                remotes => self.config.remotes(),
-                push => self.args.push,
-            })
-            .unwrap()
-        );
         Ok(())
     }
 }
