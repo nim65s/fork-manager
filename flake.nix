@@ -14,10 +14,10 @@
   };
 
   outputs =
-    inputs@{ flake-parts, nixpkgs, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [ inputs.treefmt-nix.flakeModule ];
-      systems = nixpkgs.lib.systems.flakeExposed;
+      systems = inputs.nixpkgs.lib.systems.flakeExposed;
       perSystem =
         {
           config,
@@ -26,17 +26,14 @@
           ...
         }:
         {
-          devShells = {
-            default = pkgs.mkShell {
-              nativeBuildInputs = [ config.treefmt.build.wrapper ];
-              inputsFrom = [ self'.packages.default ];
-              packages = [
-                pkgs.cargo-machete
-                pkgs.clippy
-                pkgs.rustfmt
-              ];
-            };
-            fork-manager = pkgs.mkShell { packages = [ self'.packages.default ]; };
+          devShells.default = pkgs.mkShell {
+            nativeBuildInputs = [ config.treefmt.build.wrapper ];
+            inputsFrom = [ self'.packages.default ];
+            packages = [
+              pkgs.cargo-machete
+              pkgs.clippy
+              pkgs.rustfmt
+            ];
           };
           packages.default = pkgs.callPackage ./. { };
           treefmt = {
