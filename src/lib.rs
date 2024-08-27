@@ -120,13 +120,6 @@ pub struct Config {
 }
 
 impl Config {
-    pub async fn new(args: &Args) -> Result<Self> {
-        let config_file = File::open(&args.config_file)?;
-        let mut config: Self = serde_yml::from_reader(config_file)?;
-        config.update().await?;
-        Ok(config)
-    }
-
     pub async fn update(&mut self) -> Result<()> {
         for fork in &mut self.forks {
             fork.get_prs().await?;
@@ -180,4 +173,29 @@ pub fn remote_name(value: String) -> String {
         .replace("https://", "")
         .replace("git@", "")
         .replace(":", "/")
+}
+
+pub struct ForkManager {
+    args: Args,
+    config: Config,
+}
+
+impl ForkManager {
+    pub async fn new(args: Args) -> Result<Self> {
+        let config_file = File::open(&args.config_file)?;
+        let mut config: Config = serde_yml::from_reader(config_file)?;
+        config.update().await?;
+        Ok(Self { args, config })
+    }
+
+    pub async fn main(&mut self) -> Result<()> {
+        if self.args.process()? {
+            if self.args.dry_run {
+                dbg!(&self.config);
+            } else {
+                self.config.generate(&self.args)?;
+            }
+        }
+        Ok(())
+    }
 }
