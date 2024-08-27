@@ -45,7 +45,15 @@ git reset --hard '{ fork.upstream.url | remote_name }'/'{ fork.upstream.branch }
 {
     echo "# fork-manager"
     echo
-    echo "This branch is managed by [fork-manager](https://github.com/nim65s/fork-manager/)."
+#{ if config }#
+    echo "This branch is managed from '{ config.url }'"
+#{ if config.branch }#
+    echo "on '{ config.branch }'"
+#{ endif }#
+#{ else }#
+    echo "This branch is managed with [fork-manager](https://github.com/nim65s/fork-manager/)."
+#{ endif }#
+
     echo "It is based on '{ fork.upstream.url }' '{ fork.upstream.branch }'"
     echo -n "  which is on: "
     git log --no-color --format=reference -1
