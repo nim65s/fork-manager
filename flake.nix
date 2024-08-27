@@ -35,7 +35,10 @@
               pkgs.rustfmt
             ];
           };
-          packages.default = pkgs.callPackage ./. { };
+          packages = {
+            fork-manager = pkgs.callPackage ./. { };
+            default = self'.packages.fork-manager;
+          };
           treefmt = {
             projectRootFile = "flake.nix";
             programs = {
