@@ -37,6 +37,16 @@ pub struct Args {
     )]
     pub project: PathBuf,
 
+    /// Name of the script to generate
+    #[arg(
+        short,
+        long,
+        env = "FORK_MANAGER_UPDATE_SCRIPT",
+        default_value = "update.sh",
+        value_hint = clap::ValueHint::FilePath,
+    )]
+    pub update_script: PathBuf,
+
     /// If provided, outputs the completion file for given shell and exit
     #[arg(long = "generate", value_enum)]
     pub generator: Option<clap_complete::Shell>,

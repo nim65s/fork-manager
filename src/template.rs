@@ -33,7 +33,7 @@ pub fn generate(fm: &ForkManager) -> Result<()> {
         remotes => fm.config.remotes(),
         push => fm.args.push,
     };
-    let script = fm.args.project.join("update.sh");
+    let script = fm.args.project.join(&fm.args.update_script);
     let mut file = File::create(&script)?;
     let content = tmpl.render(ctx)?;
     file.write_all(content.as_bytes())?;
