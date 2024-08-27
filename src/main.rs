@@ -3,7 +3,11 @@ use fork_manager::{Args, ForkManager, Result};
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let args = Args::parse();
-    let mut fm = ForkManager::new(args).await?;
-    fm.main().await
+    let mut args = Args::parse();
+    if args.process()? {
+        let mut fm = ForkManager::new(args).await?;
+        fm.main().await
+    } else {
+        Ok(())
+    }
 }

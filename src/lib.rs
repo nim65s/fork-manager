@@ -24,12 +24,10 @@ impl ForkManager {
     }
 
     pub async fn main(&mut self) -> Result<()> {
-        if self.args.process()? {
-            if self.args.dry_run {
-                dbg!(&self.config);
-            } else {
-                generate(self)?;
-            }
+        if self.args.dry_run {
+            dbg!(&self.config);
+        } else {
+            generate(self)?;
         }
         Ok(())
     }
