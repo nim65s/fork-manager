@@ -29,6 +29,5 @@ pre-release-replacements = [
   {exactly = 1, file = "CHANGELOG.md", replace = "<!-- next-url -->\n[Unreleased]: https://github.com/nim65s/fork-manager/compare/{{tag_name}}...HEAD", search = "<!-- next-url -->"},
   {file = "CHANGELOG.md", min = 1, replace = "{{date}}", search = "ReleaseDate"},
   {file = "CHANGELOG.md", min = 1, replace = "{{version}}", search = "Unreleased"},
-  {file = "README.md", replace = "rev: v{{version}}", search = "rev: v.*"},
   {file = "default.nix", replace = "version = \"{{version}}\";", search = "version = \".*\";"}
 ]
