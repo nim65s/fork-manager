@@ -26,7 +26,7 @@ version = "0.3.1"
 pre-release-replacements = [
   {file = "CHANGELOG.md", replace = "{{version}}", search = "unreleased"},
   {file = "CHANGELOG.md", replace = "{{date}}", search = "ReleaseDate"},
-  {exactly = 1, file = "CHANGELOG.md", replace = "...{{tag_name}}\n[unreleased]: https://github.com/nim65s/pre-commit-sort/compare/{{tag_name}}...HEAD", search = "\\.\\.\\.HEAD"},
+  {exactly = 1, file = "CHANGELOG.md", replace = "...{{tag_name}}\n[unreleased]: https://github.com/nim65s/{{crate_name}}/compare/{{tag_name}}...HEAD", search = "\\.\\.\\.HEAD"},
   {exactly = 1, file = "CHANGELOG.md", replace = "<!-- next-header -->\n\n## [unreleased] - ReleaseDate", search = "<!-- next-header -->"},
   {file = "default.nix", replace = "version = \"{{version}}\";", search = "version = \".*\";"}
 ]
