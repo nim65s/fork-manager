@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [unreleased] - ReleaseDate
 
 - git add / commit submodule changes
+- run a test script if it exists
 
 ## [0.3.2] - 2024-08-28
 

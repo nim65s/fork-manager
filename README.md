@@ -47,6 +47,8 @@ forks:
 
 It will generate a `./update.sh` script which will work in one submodule per fork, and whose actual push is gated with a `push` flag.
 
+If a file named `test-{fork}.sh` exists, it will be run.
+
 ## CLI
 
 ```
