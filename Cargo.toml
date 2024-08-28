@@ -20,7 +20,7 @@ keywords = ["git"]
 license = "MIT OR Apache-2.0"
 name = "fork-manager"
 repository = "https://github.com/nim65s/fork-manager"
-version = "0.3.2"
+version = "0.4.0"
 
 [package.metadata.release]
 pre-release-replacements = [
