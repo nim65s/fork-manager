@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased] - ReleaseDate
 
+- git add / commit submodule changes
+
 ## [0.3.2] - 2024-08-28
 
 - fix project name

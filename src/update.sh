@@ -86,6 +86,9 @@ git commit -m "document fork manager"
 [[ "$#" -gt 1 && "$1" == "push" ]] && git push -f '{ fork.target.url | remote_name }' '{ fork.target.branch }'
 popd
 
+git add '{ fork.name }'
+git commit -m "updated '{ fork.name }'"
+
 # }}
 #{ endfor }#
 
