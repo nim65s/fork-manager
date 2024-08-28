@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - git add / commit submodule changes
 - run a test script if it exists
+- fix push arg
 
 ## [0.3.2] - 2024-08-28
 
