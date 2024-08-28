@@ -1,8 +1,6 @@
 name: "CI - Nix"
-
 on:
   push:
-
 jobs:
   nix:
     runs-on: "${{ matrix.os }}-latest"

@@ -1,0 +1,2 @@
+[tool.tomlsort.overrides."package.metadata.release.pre-release-replacements"]
+inline_arrays = false

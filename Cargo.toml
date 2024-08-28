@@ -24,10 +24,10 @@ version = "0.1.0"
 
 [package.metadata.release]
 pre-release-replacements = [
+  {file = "CHANGELOG.md", min = 1, replace = "{{version}}", search = "unreleased"},
   {exactly = 1, file = "CHANGELOG.md", replace = "...{{tag_name}}", search = "\\.\\.\\.HEAD"},
-  {exactly = 1, file = "CHANGELOG.md", replace = "<!-- next-header -->\n## [Unreleased] - ReleaseDate\n", search = "<!-- next-header -->"},
-  {exactly = 1, file = "CHANGELOG.md", replace = "<!-- next-url -->\n[Unreleased]: https://github.com/nim65s/fork-manager/compare/{{tag_name}}...HEAD", search = "<!-- next-url -->"},
   {file = "CHANGELOG.md", min = 1, replace = "{{date}}", search = "ReleaseDate"},
-  {file = "CHANGELOG.md", min = 1, replace = "{{version}}", search = "Unreleased"},
+  {exactly = 1, file = "CHANGELOG.md", replace = "<!-- next-header -->\n\n## [unreleased] - ReleaseDate\n", search = "<!-- next-header -->"},
+  {exactly = 1, file = "CHANGELOG.md", replace = "<!-- next-url -->\n\n[unreleased]: https://github.com/nim65s/pre-commit-sort/compare/{{tag_name}}...HEAD", search = "<!-- next-url -->"},
   {file = "default.nix", replace = "version = \"{{version}}\";", search = "version = \".*\";"}
 ]
