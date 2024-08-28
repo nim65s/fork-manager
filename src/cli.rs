@@ -54,10 +54,6 @@ pub struct Args {
     /// Only check config, don't run git commands
     #[arg(short, long)]
     pub dry_run: bool,
-
-    /// Do actually force push
-    #[arg(long)]
-    pub push: bool,
 }
 
 impl Args {

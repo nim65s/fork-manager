@@ -45,7 +45,7 @@ forks:
 - The first takes github:NixOS/nixpkgs/master, merge one branch and one PR, and force push that to github:gepetto/nixpkgs/master.
 - Thes second take this fresh github:gepetto/nixpkgs/master, merge an additinal branch, and force push that to github:gepetto/nixpkgs/devel.
 
-The work is done in a submodule per fork, and the actual push is gated with a `--push` flag.
+It will generate a `./update.sh` script which will work in one submodule per fork, and whose actual push is gated with a `push` flag.
 
 ## CLI
 
@@ -68,7 +68,6 @@ Options:
       --generate <GENERATOR>           If provided, outputs the completion file for given shell and exit
                                        [possible values: bash, elvish, fish, powershell, zsh]
   -d, --dry-run                        Only check config, don't run git commands
-      --push                           Do actually force push
   -h, --help                           Print help
   -V, --version                        Print version
 ```

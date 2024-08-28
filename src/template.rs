@@ -31,7 +31,6 @@ pub fn generate(fm: &ForkManager) -> Result<()> {
         config => fm.config.config,
         forks => fm.config.forks,
         remotes => fm.config.remotes(),
-        push => fm.args.push,
     };
     let script = fm.args.project.join(&fm.args.update_script);
     let mut file = File::create(&script)?;
