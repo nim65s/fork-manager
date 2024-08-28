@@ -24,10 +24,9 @@ version = "0.3.0"
 
 [package.metadata.release]
 pre-release-replacements = [
-  {file = "CHANGELOG.md", min = 1, replace = "{{version}}", search = "unreleased"},
-  {exactly = 1, file = "CHANGELOG.md", replace = "...{{tag_name}}", search = "\\.\\.\\.HEAD"},
-  {file = "CHANGELOG.md", min = 1, replace = "{{date}}", search = "ReleaseDate"},
-  {exactly = 1, file = "CHANGELOG.md", replace = "<!-- next-header -->\n\n## [unreleased] - ReleaseDate\n", search = "<!-- next-header -->"},
-  {exactly = 1, file = "CHANGELOG.md", replace = "<!-- next-url -->\n\n[unreleased]: https://github.com/nim65s/pre-commit-sort/compare/{{tag_name}}...HEAD", search = "<!-- next-url -->"},
+  {file = "CHANGELOG.md", replace = "{{version}}", search = "unreleased"},
+  {file = "CHANGELOG.md", replace = "{{date}}", search = "ReleaseDate"},
+  {exactly = 1, file = "CHANGELOG.md", replace = "...{{tag_name}}\n[unreleased]: https://github.com/nim65s/pre-commit-sort/compare/{{tag_name}}...HEAD", search = "\\.\\.\\.HEAD"},
+  {exactly = 1, file = "CHANGELOG.md", replace = "<!-- next-header -->\n\n## [unreleased] - ReleaseDate", search = "<!-- next-header -->"},
   {file = "default.nix", replace = "version = \"{{version}}\";", search = "version = \".*\";"}
 ]

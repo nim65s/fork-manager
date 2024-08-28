@@ -9,11 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased] - ReleaseDate
 
+- fix cargo release & changelog
 
 ## [0.3.0] - 2024-08-28
-
-
-## [Unreleased] - 2024-08-28
 
 - push is an arg for bash, not rust
 - fix changelog
@@ -23,11 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial project creation
 
-<!-- next-url -->
-
-[unreleased]: https://github.com/nim65s/pre-commit-sort/compare/v0.3.0...HEAD
-
-[0.3.0]: https://github.com/nim65s/pre-commit-sort/compare/v0.2.0...v0.3.0
-
 [0.1.0]: https://github.com/nim65s/fork-manager/releases/tag/v0.1.0
-[0.2.0]: https://github.com/nim65s/fork-manager/compare/v0.1.0...v0.2.0
+[0.3.0]: https://github.com/nim65s/pre-commit-sort/compare/v0.1.0...v0.3.0
+[unreleased]: https://github.com/nim65s/pre-commit-sort/compare/v0.3.0...HEAD
