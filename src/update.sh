@@ -9,10 +9,12 @@ pushd "$SCRIPT_DIR"
 
 git submodule update --init
 
+GIT_SUBMODULE_STATUS=$(git submodule status)
+
 #{ for fork in forks }#
 # '{ fork.name }' {{
 
-if git submodule status | grep -q " '{ fork.name }' "
+if grep -q " '{ fork.name }' " <<< "$GIT_SUBMODULE_STATUS"
 then
     git submodule set-branch --branch '{ fork.target.branch }' '{ fork.name }'
     git submodule set-url '{ fork.name }' '{ fork.target.url }'
