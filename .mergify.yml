@@ -10,4 +10,16 @@ pull_request_rules:
           - author = dependabot
           - author = pre-commit-ci
     actions:
-      merge:
+      merge: 
+queue_rules:
+  - name: default
+    branch_protection_injection_mode: queue
+    queue_conditions:
+      - and:
+          - check-success = CI
+          - check-success = nix (ubuntu)
+          - check-success = nix (macos)
+          - approved-reviews-by = nim65s
+          - or:
+              - author = pre-commit.ci[bot]
+              - author = dependabot[bot]
