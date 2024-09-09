@@ -1,25 +1,19 @@
-pull_request_rules:
-  - name: Automatic merge
-    description: Merge auto PR when all CI checks pass
-    conditions:
-      - '#approved-reviews-by>=1'
-      - check-success = CI
-      - check-success = Nix CI
-      - check-success = pre-commit.ci
-      - or:
-          - author = dependabot
-          - author = pre-commit-ci
-    actions:
-      merge:
 queue_rules:
   - name: default
-    branch_protection_injection_mode: queue
+    merge_method: merge
     queue_conditions:
       - and:
-          - check-success = CI
-          - check-success = nix (ubuntu)
-          - check-success = nix (macos)
-          - approved-reviews-by = nim65s
+          - "check-success = CI"
+          - "check-success = nix (ubuntu)"
+          - "check-success = nix (macos)"
           - or:
-              - author = pre-commit-ci[bot]
-              - author = dependabot[bot]
+            - approved-reviews-by = nim65s
+            - author = nim65s
+            - author = pre-commit-ci[bot]
+            - author = dependabot[bot]
+
+pull_request_rules:
+  - name: Automatic queue
+    conditions: []
+      - actions:
+        queue:
