@@ -1,15 +1,15 @@
 repos:
-- repo: https://github.com/pappasam/toml-sort
-  rev: v0.23.1
-  hooks:
-  - id: toml-sort-fix
-    exclude: Cargo.lock
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.6.0
-  hooks:
-  - id: check-added-large-files
-  - id: check-symlinks
-  - id: check-toml
-  - id: check-yaml
-  - id: debug-statements
-  - id: trailing-whitespace
+  - repo: https://github.com/pappasam/toml-sort
+    rev: v0.23.1
+    hooks:
+      - id: toml-sort-fix
+        exclude: Cargo.lock
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-symlinks
+      - id: check-toml
+      - id: check-yaml
+      - id: debug-statements
+      - id: trailing-whitespace
