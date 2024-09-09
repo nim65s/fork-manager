@@ -1,5 +1,5 @@
 queue_rules:
-  - name: default
+  - name: Default
     merge_method: merge
     queue_conditions:
       - and:
@@ -15,5 +15,5 @@ queue_rules:
 pull_request_rules:
   - name: Automatic queue
     conditions: []
-      - actions:
-        queue:
+    actions:
+      queue:
