@@ -31,7 +31,6 @@ impl PR {
             octo = octo.personal_token(token)
         }
         let pr = octo.build()?.pulls(owner, repo).get(self.pr).await?;
-        // TODO if state == "closed", we should be able dismiss it
         let mut url = pr
             .head
             .repo
@@ -44,6 +43,11 @@ impl PR {
         }
         let branch = pr.head.ref_field;
         let title = Some(pr.title.unwrap_or(branch.clone()));
+        if let Some(octocrab::models::IssueState::Closed) = pr.state {
+            if let Some(url) = pr.html_url {
+                println!("⚠️ This PR is closed: {}", url.as_str());
+            }
+        }
         Ok(Change { title, url, branch })
     }
 }
