@@ -10,7 +10,7 @@ pull_request_rules:
           - author = dependabot
           - author = pre-commit-ci
     actions:
-      merge: 
+      merge:
 queue_rules:
   - name: default
     branch_protection_injection_mode: queue
