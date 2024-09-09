@@ -1,0 +1,10 @@
+queue_rules:
+  - name: bumps
+    branch_protection_injection_mode: queue
+    batch_max_failure_resolution_attempts: 1
+    batch_max_wait_time: 5 m
+    checks_timeout: 5 m
+    commit_message_template: mergify merge queue
+    merge_method: merge
+    queue_branch_merge_method: fast-forward
+    update_method: rebase
