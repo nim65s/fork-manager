@@ -1,0 +1,13 @@
+pull_request_rules:
+  - name: Automatic merge
+    description: Merge auto PR when all CI checks pass
+    conditions:
+      - '#approved-reviews-by>=1'
+      - check-success = CI
+      - check-success = Nix CI
+      - check-success = pre-commit.ci
+      - or:
+          - author = dependabot
+          - author = pre-commit-ci
+    actions:
+      merge: 
