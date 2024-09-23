@@ -6,7 +6,7 @@ octocrab = "0.39.0"
 regex = "1.10.6"
 serde = {features = ["derive"], version = "1.0.210"}
 serde_yml = "0.0.12"
-thiserror = "1.0.63"
+thiserror = "1.0.64"
 tokio = {features = ["full"], version = "1.40.0"}
 
 [dev-dependencies]
