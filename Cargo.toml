@@ -3,7 +3,7 @@ clap = {features = ["derive", "env"], version = "4.5.20"}
 clap_complete = "4.5.33"
 minijinja = {features = ["custom_syntax"], version = "2.4.0"}
 octocrab = "0.41.2"
-regex = "1.11.0"
+regex = "1.11.1"
 serde = {features = ["derive"], version = "1.0.213"}
 serde_yml = "0.0.12"
 thiserror = "1.0.65"
