@@ -1,6 +1,6 @@
 [dependencies]
 clap = {features = ["derive", "env"], version = "4.5.20"}
-clap_complete = "4.5.33"
+clap_complete = "4.5.36"
 minijinja = {features = ["custom_syntax"], version = "2.4.0"}
 octocrab = "0.41.2"
 regex = "1.11.1"
