@@ -4,7 +4,7 @@ clap_complete = "4.5.33"
 minijinja = {features = ["custom_syntax"], version = "2.4.0"}
 octocrab = "0.41.2"
 regex = "1.11.1"
-serde = {features = ["derive"], version = "1.0.213"}
+serde = {features = ["derive"], version = "1.0.214"}
 serde_yml = "0.0.12"
 thiserror = "1.0.65"
 tokio = {features = ["full"], version = "1.41.0"}
